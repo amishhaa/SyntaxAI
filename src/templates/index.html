@@ -3,45 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Predictor</title>
+    <title>AI Code Predictor</title>
+    <style>
+        body {
+            font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #2E3440; /* Dark background */
+            color: #D8DEE9; /* Light grey text */
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        .editor-container {
+            flex: 2;
+            padding: 20px;
+            height: 100%;
+            background-color: #3B4252; /* Slightly lighter dark background */
+            border-right: 2px solid #4C566A; /* Border color */
+            position: relative;
+        }
+
+        .output-container {
+            flex: 1;
+            padding: 20px;
+            height: 100%;
+            background-color: #434C5E; /* Dark background for output */
+            overflow-y: auto;
+        }
+
+        #code-editor {
+            width: 100%;
+            height: 90%;
+            background-color: #3B4252; /* Matching the editor container */
+            color: #ECEFF4; /* Bright text for contrast */
+            border: none;
+            resize: none;
+            font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        #output {
+            background-color: #4C566A; /* Dark background for output text */
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 12px;
+            color: #D8DEE9; /* Light grey text */
+        }
+
+        .suggestion-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 10%;
+            pointer-events: none;
+            font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 10px;
+            box-sizing: border-box;
+            color: rgba(236, 239, 244, 0.5); /* Semi-transparent text */
+            white-space: pre-wrap;
+        }
+
+        .suggestion-highlight {
+            background-color: rgba(143, 188, 187, 0.3); /* Pastel highlight */
+            border-bottom: 2px solid rgba(143, 188, 187, 0.7); /* Pastel border */
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Code Predictor</h1>
-    <textarea id="code-input" rows="10" cols="50" placeholder="Enter your code here..."></textarea>
-    <br>
-    <button onclick="executeCode()">Execute Code</button>
-    <button onclick="predictCode()">Predict Snippet</button>
-    <h2>Output:</h2>
-    <pre id="output"></pre>
-    <h2>Prediction:</h2>
-    <pre id="prediction"></pre>
-
+    <div class="container">
+        <div class="editor-container">
+            <textarea id="code-editor" spellcheck="false"></textarea>
+            <div id="suggestion-overlay" class="suggestion-overlay"></div>
+        </div>
+        <div class="output-container">
+            <pre id="output"></pre>
+        </div>
+    </div>
     <script>
-        async function executeCode() {
-            const code = document.getElementById('code-input').value;
-            const response = await fetch('/execute', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `code=${encodeURIComponent(code)}`
-            });
-            const data = await response.json();
-            document.getElementById('output').textContent = data.output;
+        const editor = document.getElementById('code-editor');
+        const suggestionOverlay = document.getElementById('suggestion-overlay');
+        const output = document.getElementById('output');
+
+        let debounceTimer;
+        const debounceDelay = 300; 
+
+        const pythonKeywords = [
+            "def", "class", "if", "else", "elif", "for", "while", "try", "except", "finally",
+            "import", "from", "as", "return", "yield", "with", "pass", "break", "continue",
+            "True", "False", "None", "and", "or", "not", "is", "in", "lambda", "print"
+        ];
+
+        function getCurrentWord() {
+            const cursorPosition = editor.selectionStart;
+            const textBeforeCursor = editor.value.substring(0, cursorPosition);
+            const words = textBeforeCursor.split(/\s+/);
+            return words[words.length - 1];
         }
 
-        async function predictCode() {
-            const code = document.getElementById('code-input').value;
-            const response = await fetch('/predict', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `code=${encodeURIComponent(code)}`
-            });
-            const data = await response.json();
-            document.getElementById('prediction').textContent = data.prediction;
+        function getKeywordSuggestions(currentWord) {
+            return pythonKeywords.filter(keyword => keyword.startsWith(currentWord));
         }
+
+        async function getMapModulePrediction(code) {
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `code=${encodeURIComponent(code)}`
+                });
+                const data = await response.json();
+                return data.prediction;
+            } catch (error) {
+                console.error('Error fetching prediction:', error);
+                return null;
+            }
+        }
+
+        function updateSuggestionOverlay(suggestion) {
+            if (suggestion && suggestion !== "None") {
+                suggestionOverlay.textContent = editor.value + suggestion;
+            } else {
+                suggestionOverlay.textContent = editor.value;
+            }
+        }
+
+        editor.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(async () => {
+                const code = editor.value;
+                const cursorPosition = editor.selectionStart;
+                const textBeforeCursor = editor.value.substring(0, cursorPosition);
+
+                const isWhitespace = /\s/.test(editor.value[cursorPosition - 1]);
+
+                let suggestion = null;
+
+                if (!isWhitespace) {
+                    const currentWord = getCurrentWord();
+                    const keywordSuggestions = getKeywordSuggestions(currentWord);
+                    if (keywordSuggestions.length > 0) {
+                        suggestion = keywordSuggestions[0].slice(currentWord.length);
+                    }
+                } else {
+                    suggestion = await getMapModulePrediction(code);
+                }
+
+                updateSuggestionOverlay(suggestion);
+            }, debounceDelay);
+        });
+
+        function insertSuggestion() {
+            const suggestion = suggestionOverlay.textContent.slice(editor.value.length);
+            if (suggestion) {
+                editor.value += suggestion;
+                suggestionOverlay.textContent = editor.value;
+            }
+        }
+
+        function autoIndent() {
+            const cursorPosition = editor.selectionStart;
+            const textBeforeCursor = editor.value.substring(0, cursorPosition);
+            const linesBeforeCursor = textBeforeCursor.split('\n');
+            const currentLine = linesBeforeCursor[linesBeforeCursor.length - 1];
+
+            // Calculate the indentation of the current line
+            let indentation = currentLine.match(/^\s*/)[0];
+
+            // Check if the current line ends with a colon (indicating a block)
+            if (currentLine.trim().endsWith(':')) {
+                indentation += '    '; // Add an extra level of indentation (4 spaces)
+            }
+
+            // Insert a newline and the same indentation
+            const newText = '\n' + indentation;
+
+            // Insert the new text at the cursor position
+            editor.value = editor.value.substring(0, cursorPosition) + newText + editor.value.substring(cursorPosition);
+
+            // Move the cursor to the end of the inserted text
+            editor.selectionStart = editor.selectionEnd = cursorPosition + newText.length;
+        }
+
+        editor.addEventListener('keydown', (event) => {
+            if (event.key === 'Tab') {
+                event.preventDefault();
+                insertSuggestion();
+            } else if (event.key === 'Enter') {
+                event.preventDefault();
+                autoIndent();
+            }
+        });
+
+        document.addEventListener('keydown', async (event) => {
+            if (event.ctrlKey && event.key === 'r') {
+                event.preventDefault();
+                const code = editor.value;
+                const response = await fetch('/execute', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `code=${encodeURIComponent(code)}`
+                });
+                const data = await response.json();
+                output.textContent = data.output;
+            }
+        });
     </script>
 </body>
 </html>
