@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Predictor</title>
+</head>
+<body>
+    <h1>Code Predictor</h1>
+    <textarea id="code-input" rows="10" cols="50" placeholder="Enter your code here..."></textarea>
+    <br>
+    <button onclick="executeCode()">Execute Code</button>
+    <button onclick="predictCode()">Predict Snippet</button>
+    <h2>Output:</h2>
+    <pre id="output"></pre>
+    <h2>Prediction:</h2>
+    <pre id="prediction"></pre>
+
+    <script>
+        async function executeCode() {
+            const code = document.getElementById('code-input').value;
+            const response = await fetch('/execute', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `code=${encodeURIComponent(code)}`
+            });
+            const data = await response.json();
+            document.getElementById('output').textContent = data.output;
+        }
+
+        async function predictCode() {
+            const code = document.getElementById('code-input').value;
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `code=${encodeURIComponent(code)}`
+            });
+            const data = await response.json();
+            document.getElementById('prediction').textContent = data.prediction;
+        }
+    </script>
+</body>
+</html>

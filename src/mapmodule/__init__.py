@@ -1,0 +1,1 @@
+from .mapmodule import MapModule
