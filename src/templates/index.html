@@ -184,22 +184,12 @@
             const textBeforeCursor = editor.value.substring(0, cursorPosition);
             const linesBeforeCursor = textBeforeCursor.split('\n');
             const currentLine = linesBeforeCursor[linesBeforeCursor.length - 1];
-
-            // Calculate the indentation of the current line
             let indentation = currentLine.match(/^\s*/)[0];
-
-            // Check if the current line ends with a colon (indicating a block)
             if (currentLine.trim().endsWith(':')) {
                 indentation += '    '; // Add an extra level of indentation (4 spaces)
             }
-
-            // Insert a newline and the same indentation
             const newText = '\n' + indentation;
-
-            // Insert the new text at the cursor position
             editor.value = editor.value.substring(0, cursorPosition) + newText + editor.value.substring(cursorPosition);
-
-            // Move the cursor to the end of the inserted text
             editor.selectionStart = editor.selectionEnd = cursorPosition + newText.length;
         }
 
