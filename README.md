@@ -9,8 +9,7 @@ SyntaxAI is an **Intelligent IDE** powered by an AI model trained on **Abstract 
 ---
 
 ## Problem Statement  
-Developers today rely heavily on LLMs for code completion, but these models often generate code with **syntactical and logical errors**, leading to frustration and wasted time debugging. This happens because LLMs are trained on code as if it were prose, ignoring the structural and logical nuances that make code unique.  
-
+Developers today rely heavily on LLMs for code completion, but these models often generate code with **syntactical and logical errors**, leading to frustration and wasted time debugging. This happens because LLMs are trained on code as if it were prose, ignoring the structural and logical nuances that make code unique. 
 SyntaxAI addresses this by training AI models on **ASTs**, the structural representation of code, to provide more accurate and context-aware suggestions. This reduces errors, improves code quality, and allows developers to focus on solving problems rather than fixing bugs.
 
 ---
@@ -19,17 +18,18 @@ SyntaxAI addresses this by training AI models on **ASTs**, the structural repres
 - **AST-Based Code Generation**:  
   Generates code based on the structural backbone of programs, ensuring logical correctness.  
   Ignores superficial differences like variable names, focusing on the code's true meaning.
+  Uses Python's 'ast' module to parse the code into ASTs.
 
 - **Self-Learning Model**:  
   Uses a **reward-based system** to learn from user interactions.  
   Assigns positive weights to successful code snippets and negative weights to buggy ones, improving over time.
 
 - **Lightweight and Customizable**:  
-  Designed to be lightweight and easy to integrate with existing IDEs.  
+  Designed to be lightweight and easy to integrate with existing IDEs with the training data only being ~1000 lines and model of ~50 lines. 
   Supports automatic code formatting in accordance with style guides.
 
-- **Real-Time Suggestions**:  
-  Provides context-aware code suggestions as you type, reducing the need for manual corrections.
+- **Real-Time Suggestions and Learning**:  
+  Provides context-aware code suggestions as you type, reducing the need for manual corrections and learns from your code in real time.
 
 ---
 
@@ -46,55 +46,6 @@ SyntaxAI addresses this by training AI models on **ASTs**, the structural repres
 
 4. **User Interaction**:  
    As users write code, the model learns from their actions, improving its suggestions over time.  
-
----
-
-## Impact  
-- **For Developers**:  
-  Reduces debugging time and improves code quality.  
-  Increases productivity by automating repetitive tasks.  
-
-- **For Organizations**:  
-  Accelerates development cycles and reduces costs.  
-  Enhances software reliability and maintainability.  
-
-- **For the Community**:  
-  Democratizes software development by making coding more accessible.  
-  Encourages innovation by allowing developers to focus on problem-solving.  
-
----
-
-## Feasibility  
-- **Technical Feasibility**:  
-  Built using Python's `ast` module and lightweight, self-learning algorithms.  
-  Tested on a dataset of 1,000 lines of dummy Python code, outperforming traditional LLMs in accuracy.  
-
-- **Scalability**:  
-  Designed to be scalable with larger datasets and more powerful computing resources.  
-  Can be integrated with popular IDEs like Visual Studio Code and IntelliJ.  
-
-- **Economic Viability**:  
-  Initial investment required for GPUs/CPUs and large-scale datasets.  
-  High potential for returns through subscriptions and partnerships.  
-
----
-
-## Use of AI  
-SyntaxAI trains its model on **ASTs** instead of raw code, ensuring better code generation and fewer bugs. The model uses a **reward-based system** to learn from user interactions, assigning weights to code snippets based on their success. This self-learning approach makes the model more accurate and reliable over time.
-
----
-
-## Alternatives Considered  
-- **Pre-Trained Graph Learning Algorithms**:  
-  Considered using CNNs and GNNs but opted for a lightweight, self-learning model for the prototype.  
-- **External ML Libraries**:  
-  Avoided heavy dependencies like TensorFlow to keep the prototype lightweight and customizable.  
-
----
-
-## References  
-- [AST-Based Code Analysis Research](https://arxiv.org/abs/2011.03449)  
-- IEEE Studies on Software Development Inefficiencies  
 
 ---
 
