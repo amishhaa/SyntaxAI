@@ -1,145 +1,110 @@
-SyntaxAI
-Spend your time creating, not correcting.
+# SyntaxAI  
+**Spend your time creating, not correcting.**
 
-Project Overview
-SyntaxAI is an Intelligent IDE powered by an AI model trained on Abstract Syntax Trees (ASTs) to provide accurate, bug-free code generation and auto-completion. Unlike traditional Large Language Models (LLMs) that rely on surface-level tokenization, SyntaxAI focuses on the backbone of code (ASTs) to eliminate biases caused by variable naming and formatting. This approach ensures higher accuracy, fewer bugs, and increased developer productivity.
+---
 
-Problem Statement
-Developers today rely heavily on LLMs for code completion, but these models often generate code with syntactical and logical errors, leading to frustration and wasted time debugging. This happens because LLMs are trained on code as if it were prose, ignoring the structural and logical nuances that make code unique.
+## Project Overview  
+SyntaxAI is an **Intelligent IDE** powered by an AI model trained on **Abstract Syntax Trees (ASTs)** to provide accurate, bug-free code generation and auto-completion. Unlike traditional Large Language Models (LLMs) that rely on surface-level tokenization, SyntaxAI focuses on the **backbone of code** (ASTs) to eliminate biases caused by variable naming and formatting. This approach ensures higher accuracy, fewer bugs, and increased developer productivity.
 
-SyntaxAI addresses this by training AI models on ASTs, the structural representation of code, to provide more accurate and context-aware suggestions. This reduces errors, improves code quality, and allows developers to focus on solving problems rather than fixing bugs.
+---
 
-Key Features
-AST-Based Code Generation:
+## Problem Statement  
+Developers today rely heavily on LLMs for code completion, but these models often generate code with **syntactical and logical errors**, leading to frustration and wasted time debugging. This happens because LLMs are trained on code as if it were prose, ignoring the structural and logical nuances that make code unique.  
 
-Generates code based on the structural backbone of programs, ensuring logical correctness.
+SyntaxAI addresses this by training AI models on **ASTs**, the structural representation of code, to provide more accurate and context-aware suggestions. This reduces errors, improves code quality, and allows developers to focus on solving problems rather than fixing bugs.
 
-Ignores superficial differences like variable names, focusing on the code's true meaning.
+---
 
-Self-Learning Model:
+## Key Features  
+- **AST-Based Code Generation**:  
+  Generates code based on the structural backbone of programs, ensuring logical correctness.  
+  Ignores superficial differences like variable names, focusing on the code's true meaning.
 
-Uses a reward-based system to learn from user interactions.
+- **Self-Learning Model**:  
+  Uses a **reward-based system** to learn from user interactions.  
+  Assigns positive weights to successful code snippets and negative weights to buggy ones, improving over time.
 
-Assigns positive weights to successful code snippets and negative weights to buggy ones, improving over time.
+- **Lightweight and Customizable**:  
+  Designed to be lightweight and easy to integrate with existing IDEs.  
+  Supports automatic code formatting in accordance with style guides.
 
-Lightweight and Customizable:
+- **Real-Time Suggestions**:  
+  Provides context-aware code suggestions as you type, reducing the need for manual corrections.
 
-Designed to be lightweight and easy to integrate with existing IDEs.
+---
 
-Supports automatic code formatting in accordance with style guides.
+## How It Works  
+1. **Training Data**:  
+   The model is trained on a dataset of Python code converted into ASTs using Python's built-in `ast` module.  
 
-Real-Time Suggestions:
+2. **AST Parsing**:  
+   Code is broken down into nodes and subnodes, representing its logical structure.  
 
-Provides context-aware code suggestions as you type, reducing the need for manual corrections.
+3. **Graph-Based Learning**:  
+   Nodes are connected in a graph-like structure, with weights assigned based on their likelihood of appearing together.  
+   The model uses a **greedy reward system** to suggest the most probable and profitable code snippets.  
 
-How It Works
-Training Data:
+4. **User Interaction**:  
+   As users write code, the model learns from their actions, improving its suggestions over time.  
 
-The model is trained on a dataset of Python code converted into ASTs using Python's built-in ast module.
+---
 
-AST Parsing:
+## Impact  
+- **For Developers**:  
+  Reduces debugging time and improves code quality.  
+  Increases productivity by automating repetitive tasks.  
 
-Code is broken down into nodes and subnodes, representing its logical structure.
+- **For Organizations**:  
+  Accelerates development cycles and reduces costs.  
+  Enhances software reliability and maintainability.  
 
-Graph-Based Learning:
+- **For the Community**:  
+  Democratizes software development by making coding more accessible.  
+  Encourages innovation by allowing developers to focus on problem-solving.  
 
-Nodes are connected in a graph-like structure, with weights assigned based on their likelihood of appearing together.
+---
 
-The model uses a greedy reward system to suggest the most probable and profitable code snippets.
+## Feasibility  
+- **Technical Feasibility**:  
+  Built using Python's `ast` module and lightweight, self-learning algorithms.  
+  Tested on a dataset of 1,000 lines of dummy Python code, outperforming traditional LLMs in accuracy.  
 
-User Interaction:
+- **Scalability**:  
+  Designed to be scalable with larger datasets and more powerful computing resources.  
+  Can be integrated with popular IDEs like Visual Studio Code and IntelliJ.  
 
-As users write code, the model learns from their actions, improving its suggestions over time.
+- **Economic Viability**:  
+  Initial investment required for GPUs/CPUs and large-scale datasets.  
+  High potential for returns through subscriptions and partnerships.  
 
-Impact
-For Developers:
+---
 
-Reduces debugging time and improves code quality.
+## Use of AI  
+SyntaxAI trains its model on **ASTs** instead of raw code, ensuring better code generation and fewer bugs. The model uses a **reward-based system** to learn from user interactions, assigning weights to code snippets based on their success. This self-learning approach makes the model more accurate and reliable over time.
 
-Increases productivity by automating repetitive tasks.
+---
 
-For Organizations:
+## Alternatives Considered  
+- **Pre-Trained Graph Learning Algorithms**:  
+  Considered using CNNs and GNNs but opted for a lightweight, self-learning model for the prototype.  
+- **External ML Libraries**:  
+  Avoided heavy dependencies like TensorFlow to keep the prototype lightweight and customizable.  
 
-Accelerates development cycles and reduces costs.
+---
 
-Enhances software reliability and maintainability.
+## References  
+- [AST-Based Code Analysis Research](https://arxiv.org/abs/2011.03449)  
+- IEEE Studies on Software Development Inefficiencies  
 
-For the Community:
+---
 
-Democratizes software development by making coding more accessible.
+## Screenshots  
+![Example Suggestions](https://github.com/amishhaa/SyntaxAI/tree/master/screenshots/suggestion_example.png)  
+*Example suggestions generated by SyntaxAI.*
 
-Encourages innovation by allowing developers to focus on problem-solving.
+---
 
-Feasibility
-Technical Feasibility:
-
-Built using Python's ast module and lightweight, self-learning algorithms.
-
-Tested on a dataset of 1,000 lines of dummy Python code, outperforming traditional LLMs in accuracy.
-
-Scalability:
-
-Designed to be scalable with larger datasets and more powerful computing resources.
-
-Can be integrated with popular IDEs like Visual Studio Code and IntelliJ.
-
-Economic Viability:
-
-Initial investment required for GPUs/CPUs and large-scale datasets.
-
-High potential for returns through subscriptions and partnerships.
-
-Use of AI
-SyntaxAI trains its model on ASTs instead of raw code, ensuring better code generation and fewer bugs. The model uses a reward-based system to learn from user interactions, assigning weights to code snippets based on their success. This self-learning approach makes the model more accurate and reliable over time.
-
-Alternatives Considered
-Pre-Trained Graph Learning Algorithms:
-
-Considered using CNNs and GNNs but opted for a lightweight, self-learning model for the prototype.
-
-External ML Libraries:
-
-Avoided heavy dependencies like TensorFlow to keep the prototype lightweight and customizable.
-
-References
-AST-Based Code Analysis Research
-
-IEEE Studies on Software Development Inefficiencies
-
-Screenshots
-Example Suggestions
-Example suggestions generated by SyntaxAI.
-
-Getting Started
-Clone the repository:
-
-bash
-Copy
-git clone https://github.com/amishhaa/SyntaxAI.git  
-Install dependencies:
-
-bash
-Copy
-pip install -r requirements.txt  
-Run the Flask application:
-
-bash
-Copy
-python app.py  
-Open the IDE in your browser and start coding!
-
-Future Work
-Expand training datasets to include more programming languages.
-
-Integrate with popular IDEs like Visual Studio Code and IntelliJ.
-
-Develop a cloud-based platform for scalable deployment.
-
-Contact
-Participant Name: Amisha Chhajed
-
-Email: amishhhaaaa@gmail.com
-
-GitHub: amishhaa
-
-SyntaxAI: Revolutionizing code generation with the power of ASTs. 🚀
+## Getting Started  
+1. Clone the repository:  
+   ```bash  
+   git clone https://github.com/amishhaa/SyntaxAI.git  
